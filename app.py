@@ -42,12 +42,12 @@ def test():
 def main():
     st.title("Robotics Physics Calculator")
 
-    mass = st.text_input("Mass of the robot (kg)", "0.224")
-    dimension = st.text_input("Dimension of the robot (m)", "0.1")
-    symin = st.text_input("symin", "0.50")
-    symax = st.text_input("symax", "0.75")
-    Srobot = st.text_input("Srobot", "0.465")
-    s = st.text_input("s", "0.102")
+    mass = st.text_input("Mass of the ball (kg)", "0.224")
+    dimension = st.text_input("Spring extension distance (m)", "0.1")
+    symin = st.text_input("Symin ระยะต่ำสุดของพื้นถึงตะกล้า", "0.50")
+    symax = st.text_input("Symax ระยะสูงสุดของพื้นถึงตะกล้า", "0.75")
+    Srobot = st.text_input("Srobot ความสูงหุ่นยนนต์", "0.465")
+    s = st.text_input("s ระยะความกว้างหุ่งถึงจุดปล่อยลูกสควอซ", "0.102")
 
     if st.button("Calculate"):
         try:
