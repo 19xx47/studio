@@ -15,14 +15,17 @@ def velocity(symin, symax, Srobot, s):
     t = uy / g
     ux = Sx / t
     angle = math.atan(uy / ux)
-    print("Ux = ", ux)
-    print("Uy = ", uy)
-    print("Angle = ", angle)
-    print("Symin =", Symin, "Symax =", Symax, "Srobot =", Srobot, "s =", s, "Sx =", Sx, "t =", uy / g)
-    st.success(f"Ux = {ux}")
-    st.success(f"Uy = {uy}")
-    st.success(f"Angle = {angle}")
-    st.success(f"Symin = {Symin}, Symax = {Symax}, Srobot = {Srobot}, s = {s}, Sx = {Sx}, t = {t}")
+    print("Ux ความเร็วต้นในแนวแกน x= ", ux)
+    print("Uy ความเร็วต้นในแนวแกน y= ", uy)
+    print("Angle มุม= ", angle)
+    print("Symin ระยะต่ำสุดของพื้นถึงตะกล้า=", Symin, "Symax ระยะสูงสุดของพื้นถึงตะกล้า=", Symax, "Srobot ความสูงหุ่นยนนต์=", Srobot, "s ระยะความกว้างหุ่งถึงจุดปล่อยลูกสควอซ=", s, 
+"Sx ระยะรวมในแนวแกน x =", Sx, "t =", uy / g)
+    st.success(f"Ux ความเร็วต้นในแนวแกน x= {ux}")
+    st.success(f"Uy ความเร็วต้นในแนวแกน y = {uy}")
+    st.success(f"Angle มุม= {angle}")
+    st.success(f"t เวลา= {t}")
+#     st.success(f"Symin ระยะต่ำสุดของพื้นถึงตะกล้า= {Symin}, Symax ระยะสูงสุดของพื้นถึงตะกล้า= {Symax}, Srobot ความสูงหุ่นยนนต์= {Srobot}, s ระยะความกว้างหุ่งถึงจุดปล่อยลูกสควอซ= {s}, 
+# Sx ระยะรวมในแนวแกน= {Sx}, t = {t}")
 
     return ux, uy, angle
 
@@ -41,8 +44,8 @@ def main():
 
     mass = st.text_input("Mass of the robot (kg)", "0.224")
     dimension = st.text_input("Dimension of the robot (m)", "0.1")
-    symin = st.text_input("symin", "0.1")
-    symax = st.text_input("symax", "0.25")
+    symin = st.text_input("symin", "0.50")
+    symax = st.text_input("symax", "0.75")
     Srobot = st.text_input("Srobot", "0.465")
     s = st.text_input("s", "0.102")
 
@@ -69,5 +72,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-print(conserveenergy(0.224, 0.1,0.1, 0.25, 0.465, 0.102))
+print(conserveenergy(0.224, 0.1,0.5, 0.75, 0.465, 0.102))
 print(test())
