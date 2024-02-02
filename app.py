@@ -57,6 +57,7 @@ def main():
             
             result_k = conserveenergy(mass, dimension, symin, symax, Srobot, s)
             st.success(f"result_k: {result_k}")
+            st.success(f"F(N): {result_k*0.1}")
             result_pass = test()
             st.success(f"result_pass: {result_pass}")
         except ValueError:
