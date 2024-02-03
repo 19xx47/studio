@@ -8,7 +8,7 @@ def scale_image(path):
         with Image.open(path) as img:
             w, h = img.size
             print(f'Opening {path} with size {w}x{h}')
-            img = img.resize((2224, 1224))
+            img = img.resize((754, 1224))
             img.save(path.replace('.png', '_scaled.png'))
     except FileNotFoundError:
         print(f'File {path} not found')
@@ -22,12 +22,15 @@ def velocity(symin, symax, Srobot, s):
     print("Uy = ", uy)
     t = uy / g
     ux = Sx / t
-    angle = math.atan(uy / ux)
-    return ux, uy, angle,t
+    angle = np.arctan2(uy, ux)
+    angle_degrees = np.degrees(angle)
+
+    # angle = math.atan(uy / ux)
+    return ux, uy, angle_degrees,t
 
 
 def plot_trajectory(symin, symax, Srobot, s):
-    ux, uy, angle,t = velocity(symin, symax, Srobot, s)
+    ux, uy, angle_degrees,t = velocity(symin, symax, Srobot, s)
 
     t_total = 2 * uy / g  # Total time of flight
     t_values = np.linspace(0, t_total, num=100)
@@ -36,23 +39,25 @@ def plot_trajectory(symin, symax, Srobot, s):
     x_values = ux * t_values
     y_values = Srobot + uy * t_values - 0.5 * g * t_values**2
 
-    # Plot the trajectory
-    plt.figure(figsize=(8, 6))
-    plt.plot(x_values, y_values)
-    plt.xlim(0, 2)
-    plt.title('Projectile Motion Trajectory')
-    plt.xlabel('Distance (m)')
-    plt.ylabel('Height (m)')
-    plt.grid(True)
+    background_image = plt.imread('Screenshot 2567-02-03 at 12.15.53_scaled.png')  # Replace with the actual path to your image
+    
+    fig, ax = plt.subplots(figsize=(8, 6))
+    ax.imshow(background_image, extent=[0, 2.5, 0, 0.5]) 
+    ax.plot(x_values, y_values)
+    ax.set_xlim(0, 2)
+    ax.set_title('Projectile Motion Trajectory')
+    ax.set_xlabel('Distance (m)')
+    ax.set_ylabel('Height (m)')
+    ax.grid(True)
     
     # Mark the initial and final points
-    plt.scatter(0, Srobot, color='red', label='Launch Point')
-    plt.scatter(x_values[-1], y_values[-1], color='green', label='Landing Point')
-    plt.legend()
-    st.pyplot(plt)
+    ax.scatter(0, Srobot, color='red', label='Launch Point')
+    ax.scatter(x_values[-1], y_values[-1], color='green', label='Landing Point')
+    ax.legend()
+    
+    st.pyplot(fig)
 
-    # Show the plot
-    plt.show()
+    # plt.show()
 
 path = 'Screenshot 2567-02-03 at 12.15.53.png'
 scale_image(path)

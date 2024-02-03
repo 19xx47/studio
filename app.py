@@ -5,6 +5,7 @@
 import math
 import streamlit as st
 from check import velocity, plot_trajectory
+import numpy as np
 g = 9.81
 
 def velocity(symin, symax, Srobot, s):
@@ -15,7 +16,11 @@ def velocity(symin, symax, Srobot, s):
     print("Uy = ", uy)
     t = uy / g
     ux = Sx / t
-    angle = math.atan(uy / ux)
+    angle = np.arctan2(uy, ux)
+    angle_degrees = np.degrees(angle)
+    print("angle_degrees = ", angle_degrees)
+
+    # angle = math.atan(uy / ux)
 #     print("Ux ความเร็วต้นในแนวแกน x= ", ux)
 #     print("Uy ความเร็วต้นในแนวแกน y= ", uy)
 #     print("Angle มุม= ", angle)
@@ -28,15 +33,17 @@ def velocity(symin, symax, Srobot, s):
 #     st.success(f"Symin ระยะต่ำสุดของพื้นถึงตะกล้า= {Symin}, Symax ระยะสูงสุดของพื้นถึงตะกล้า= {Symax}, Srobot ความสูงหุ่นยนนต์= {Srobot}, s ระยะความกว้างหุ่งถึงจุดปล่อยลูกสควอซ= {s}, 
 # Sx ระยะรวมในแนวแกน= {Sx}, t = {t}")
 
-    return ux, uy, angle, t
+    return ux, uy, angle_degrees, t
 
 def conserveenergy(mass, dimension, symin, symax, Srobot, s):
     ux, uy, angle,t = velocity(symin, symax, Srobot, s)
     k = (0.5 * mass * (ux**2) + mass * g * dimension * math.sin(angle)) * 2 / dimension**2
     return k
 def test():
-    angle = math.tan(velocity(0.1, 0.25, 0.465, 0.102)[2])
-    result = angle * (0.102 + 2)
+    angle = velocity(0.5, 0.75, 0.465, 0.102)[2]
+    angle_radians = np.radians(angle)
+    print("Angle= ", np.tan(angle_radians))
+    result = np.tan(angle_radians) * (0.102 + 2)
     print("Result of pass= ", result)
     return result
 
@@ -59,12 +66,12 @@ def main():
             Srobot = float(Srobot)
             s = float(s)
             plot_trajectory(symin, symax, Srobot, s)
-            st.image('Screenshot 2567-02-03 at 12.15.53_scaled.png', caption='Projectile Motion Trajectory', use_column_width=True)
+            # st.image('Screenshot 2567-02-03 at 12.15.53_scaled.png', caption='Projectile Motion Trajectory', use_column_width=True)
             result_k = conserveenergy(mass, dimension, symin, symax, Srobot, s)
-            ux, uy, angle, t = velocity(symin, symax, Srobot, s)
+            ux, uy, angle_degrees, t = velocity(symin, symax, Srobot, s)
             st.success(f"Ux ความเร็วต้นในแนวแกน x= {ux}")
             st.success(f"Uy ความเร็วต้นในแนวแกน y = {uy}")
-            st.success(f"Angle มุม= {angle}")
+            st.success(f'Trajectory Angle: {angle_degrees:.2f} degrees')
             st.success(f"t เวลา= {t}")
             st.success(f"result_k: {result_k}")
             st.success(f"F(N): {result_k*0.1}")
