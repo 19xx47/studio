@@ -48,7 +48,7 @@ def test():
     return result
 
 def main():
-    st.title("Robotics Physics Calculator")
+    st.title("Shoot a squash ball Calculator")
 
     mass = st.text_input("Mass of the ball (kg)", "0.224")
     dimension = st.text_input("Spring extension distance (m)", "0.1")
