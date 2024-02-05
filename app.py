@@ -37,7 +37,7 @@ def velocity(symin, symax, Srobot, s):
 
 def conserveenergy(mass, dimension, symin, symax, Srobot, s):
     ux, uy, angle,t = velocity(symin, symax, Srobot, s)
-    k = (0.5 * mass * (ux**2) + mass * g * dimension * math.sin(angle)) * 2 / dimension**2
+    k = (0.5 * mass * (ux**2) + mass * g * Srobot * math.sin(angle)) * 2 / dimension**2
     return k
 def test():
     angle = velocity(0.5, 0.75, 0.465, 0.102)[2]
