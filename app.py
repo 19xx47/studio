@@ -6,7 +6,7 @@ import math
 import streamlit as st
 from check import velocity, plot_trajectory
 import numpy as np
-from main import find_prev_velocity_y, find_time, find_prev_velocity_x, find_angle, plot_trajectory
+from main import find_prev_velocity_y, find_time, find_prev_velocity_x, find_angle, plot_trajectory, find_kinetic_energy
 g = 9.81
 def velocity(symin, symax, Srobot, s):
     Sx = s
@@ -41,14 +41,14 @@ def conserveenergy(mass, dimension, symin, symax, Srobot, s, Spring_Length):
     print ("ux= ", ux, "uy= ", uy, "angle= ", angle, "t= ", t, "mass= ", mass, "dimension= ", dimension, "Spring_Length= ", Spring_Length)
     k = (0.5 * mass * (ux**2) + mass * g * Spring_Length * math.sin(angle)) * 2 / dimension**2
     return k
-def test(Hight_robot):
-    angle = velocity(0.5, 0.75, 0.465, 0.102)[2]
-    print("Angle= ", angle)
-    angle_radians = np.radians(angle)
+def test(Hight_robot,angle):
+
+    print(" what isAngle= ", angle)
+    # angle_radians = np.radians(angle)
     # print("Angle in radians= ", np.tan(angle))
     # print("Anglegg= ", np.tan(angle_radians))
     # print("Srobot= ", Srobot+1,angle_radians)
-    result = (Hight_robot + 1) *np.tan(angle_radians)
+    result = abs((1 - (0.4*(np.sin(angle)))) / np.tan(angle) )
     print("Result of pass= ", result)
     return result
 
@@ -56,23 +56,26 @@ def main():
     st.title("Shoot a squash ball Calculator")
 
     mass = st.text_input("Mass of the ball (kg)", "0.224")
-    dimension = st.text_input("Spring extension distance (m)", "0.1")
     high_fromfloor_min = st.text_input("ระยะต่ำสุดของพื้นถึงตะกล้า", "0.75")
-    high_fromfloor = st.text_input("ระยะของพื้นถึงตะกล้า", "1")
+    high_fromfloor = st.text_input("ระยะของพื้นถึงตะกล้า", "0.8235")
     high_fromfloor_max = st.text_input("ระยะสูงสุดของพื้นถึงตะกล้า", "0.75")
     # Srobot = st.text_input("Srobot ความสูงหุ่นยนนต์", "0.465")
-    Sx = st.text_input("s ระยะจากจุดปล่อยลูกสควอซ", "0.2")
-    Spring_Length = st.text_input("Spring_Length ความยาวของสปริง", "0.15")
+    Sx = st.text_input("s ระยะจากจุดปล่อยลูกสควอซ", "2")
+    Spring_Length = st.text_input("Spring_Length ความยาวของสปริง", "0.30")
+    mass_pluger = st.text_input("mass_pluger", "0.25")
+    compression = st.text_input("Spring extension distance (m)", "0.03")
 
     if st.button("Calculate"):
         try:
             mass = float(mass)
-            dimension = float(dimension)
             high_fromfloor_min = float(high_fromfloor_min)
             high_fromfloor_max = float(high_fromfloor_max)
             high_fromfloor = float(high_fromfloor)
             Spring_Length = float(Spring_Length)
             Sx = float(Sx)
+            mass_pluger = float(mass_pluger)
+            compression = float(compression)
+
             # plot_trajectory(high_fromfloor)
             # st.image('Screenshot 2567-02-03 at 12.15.53_scaled.png', caption='Projectile Motion Trajectory', use_column_width=True)
             # result_k = conserveenergy(mass, dimension, symin, symax, Srobot, s, Spring_Length)
@@ -80,14 +83,15 @@ def main():
             t = find_time(uy)
             ux = find_prev_velocity_x(Sx, t)
             angle_degrees = find_angle(ux, uy)
+            k, F= find_kinetic_energy(mass, uy,ux, mass_pluger, compression)
             st.success(f"Ux ความเร็วต้นในแนวแกน x= {ux}")
             st.success(f"Uy ความเร็วต้นในแนวแกน y = {uy}")
             st.success(f'Trajectory Angle: {angle_degrees:.2f} degrees')
             st.success(f"t เวลา= {t}")
-            # st.success(f"result_k: {result_k}")
-            # st.success(f"F(N): {result_k*0.1}")
+            st.success(f"result_k: {k}")
+            st.success(f"F(N): {F}")
             Hight_robot = 0.40*math.sin(angle_degrees)
-            result_pass = test(Hight_robot)
+            result_pass = test(Hight_robot,angle_degrees)
             st.success(f"result_pass_obstacle: {result_pass}")
             plot_trajectory(ux, uy, angle_degrees,t,Hight_robot)
         except ValueError:

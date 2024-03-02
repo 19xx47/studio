@@ -25,7 +25,11 @@ def find_angle(ux, uy):
     angle_degrees = math.degrees(angle)
     return angle_degrees
 
-# def find_kinetic_energy(mass, dimension, symin, symax, Srobot, s, Spring_Length):
+def find_kinetic_energy(mass, uy,ux, mass_pluger, compression):
+    k = (((0.5 * mass * (math.sqrt(uy**2 + ux**2)**2))*2 )/ compression**2)
+    F = k * compression
+    return k, F
+    
 def scale_image(path):
     try:
         with Image.open(path) as img:
@@ -36,6 +40,7 @@ def scale_image(path):
     except FileNotFoundError:
         print(f'File {path} not found')
 
+    
 def plot_trajectory(ux, uy, angle_degrees,t,Srobot):
     # ux, uy, angle_degrees,t = velocity(symin, symax, Srobot, s)
 
